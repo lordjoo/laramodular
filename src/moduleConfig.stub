@@ -1,0 +1,10 @@
+<?php
+return [
+    'name' => '{{moduleName}}',
+    'description' => '',
+    'status' => true,
+    'autoload' => [
+//        'Helpers/functions.php'
+    ],
+    'middleware' => [],
+];

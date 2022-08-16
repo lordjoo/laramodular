@@ -1,0 +1,28 @@
+{
+    "name": "lordjoo/laramodular",
+    "description": "A Laravel Package to enable Modular design for your app",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lordjoo",
+            "email": "youssef.afify122@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lordjoo\\Laramodular\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lordjoo\\Laramodular\\LaraModularServiceProvider"
+            ]
+        }
+    }
+}
