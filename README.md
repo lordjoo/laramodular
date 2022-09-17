@@ -1,6 +1,6 @@
 # LaraModular 
-Is a simple and lightweight package to create modular Laravel applications,
-basically it's a modules scaffold generator with a simple and lightweigh service provider to register the modules.
+A library to enable modular design into your Laravel application,
+It's also integerate seamlessly with <a href="http://filamentphp.com/">Filament</a> for the Admin panel
 
 ## Requirements
 - Laravel >= 5.5
@@ -13,10 +13,17 @@ composer require lordjoo/laramodular
 > The package will register itself.
 
 ## Usage 
-To generate a module just use this command 
+- To generate a module just use this command 
 ```
-php artisan new:module <module_name>
+php artisan make:module <module_name>
+```  
+
+- To Create Filament Resource use 
 ```
+php artisan make:modular-resource <resource_name>
+```
+We will try to detect which module you want the resource in and you can change it as well 
+
 
 ## Contributing
 Please feel free to contribute to this project, as I want to add helper functions for the following   
