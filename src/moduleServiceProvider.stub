@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\{{moduleName}};
+namespace {{namespace}}\{{moduleName}};
 
 use Lordjoo\Laramodular\ModuleServiceProvider;
 
