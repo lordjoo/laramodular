@@ -12,6 +12,8 @@ class MakeModuleCommand extends Command
     protected $description = 'Create New Module';
     private string $module_name;
     private string $module_path;
+    private string $module_namespace;
+
 
     public function handle()
     {
@@ -22,6 +24,7 @@ class MakeModuleCommand extends Command
             ->camel()
             ->studly();
         $modules_path = config('laramodular.modules_path');
+        $this->module_namespace = $module_namespace = config('laramodular.modules_namespace');
         if (!is_dir($modules_path))
             mkdir($modules_path, 0777, true);
 
@@ -95,6 +98,8 @@ class MakeModuleCommand extends Command
     {
         $stub = file_get_contents(__DIR__ . '/moduleServiceProvider.stub');
         $stub = str_replace('{{moduleName}}', $this->module_name, $stub);
+        $stub = str_replace('{{namespace}}', $this->module_namespace, $stub);
+        
         file_put_contents($this->module_path . DIRECTORY_SEPARATOR . $this->module_name . 'ModuleServiceProvider.php', $stub);
     }
 
