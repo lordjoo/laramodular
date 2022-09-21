@@ -207,7 +207,7 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
 
     public function getBaseResourcePath($resource)
     {
-        $module =  config('laramodular.modules_namespace').'\\'.$this->module_name;
+        $module =  config('laramodular.modules_path').'\\'.$this->module_name;
         return base_path(
             (string) Str::of($resource)
                 ->prepend($module.'\\Filament\\Resources\\')
