@@ -67,6 +67,7 @@ trait FilamentModuleTrait
             }
 
             if (is_subclass_of($fileClass, RelationManager::class)) {
+                $this->livewireComponents[] = $fileClass;
                 continue;
             }
 
