@@ -40,7 +40,7 @@ trait FilamentModuleTrait
             $fileClass = (string) Str::of($namespace)
                 ->append('\\', $file->getRelativePathname())
                 ->replace(['/', '.php'], ['\\', '']);
-            
+
             if (! class_exists($fileClass)) {
                 continue;
             }
@@ -66,10 +66,10 @@ trait FilamentModuleTrait
                 continue;
             }
 
-            if (!is_subclass_of($fileClass, RelationManager::class)) {
-//                 $this->livewireComponents[] = $fileClass;
-                continue;
-            }
+//            if (is_subclass_of($fileClass, RelationManager::class)) {
+//                $this->livewireComponents[] = $fileClass;
+//                continue;
+//            }
 
             if (! is_subclass_of($fileClass, Component::class)) {
                 continue;
