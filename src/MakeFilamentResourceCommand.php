@@ -183,7 +183,7 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
         return static::SUCCESS;
     }
 
-    public function getModel()
+    public function getModel(string $model = null): ?string
     {
         $model = (string) Str::of($this->argument('name') ?? $this->askRequired('Model (e.g. `BlogPost`)', 'name'))
             ->studly()
