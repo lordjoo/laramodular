@@ -10,7 +10,6 @@ use ReflectionClass;
 
 class MakeFilamentResourceCommand extends MakeResourceCommand
 {
-    use \Filament\Commands\Concerns\CanGenerateResources;
     use Concerns\CanIndentStrings;
     use Concerns\CanManipulateFiles;
     use Concerns\CanValidateInput;
@@ -211,7 +210,7 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
         return base_path(
             (string) Str::of($resource)
                 ->prepend($module.'\\Filament\\Resources\\')
-                ->replace('\\', '/'),
+                ->replace('\\', '/')->replace(base_path(), ''),
         );
     }
 
