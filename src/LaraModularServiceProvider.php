@@ -18,18 +18,16 @@ class LaraModularServiceProvider extends ServiceProvider
      */
     private mixed $modules_namespace;
     private array $modules;
-
+    private array $commands;
     public function register()
     {
+        $this->commands = $this->getCommands();
         // merge config
         $this->mergeConfigFrom(
             __DIR__ . '/laramodular.php', 'laramodular'
         );
         // register console command
-        $this->commands([
-            MakeModuleCommand::class,
-            MakeFilamentResourceCommand::class,
-        ]);
+        $this->commands($this->commands);
         // publish config
         $this->publishes([
             __DIR__ . '/laramodular.php' => config_path('laramodular.php'),
@@ -180,6 +178,15 @@ class LaraModularServiceProvider extends ServiceProvider
 //            $class = "App\\Modules\\{$module}\\Middleware\\{$middleware}";
 //            $router->aliasMiddleware($name, $class);
 //        }
+    }
+
+    public function getCommands() : array
+    {
+        $commands = [MakeModuleCommand::class];
+        if(class_exists("Filament\Commands\MakeResourceCommand")) {
+            array_push($commands, MakeFilamentResourceCommand::class);
+        }
+        return $commands;
     }
 
 

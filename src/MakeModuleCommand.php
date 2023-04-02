@@ -99,7 +99,7 @@ class MakeModuleCommand extends Command
         $stub = file_get_contents(__DIR__ . '/moduleServiceProvider.stub');
         $stub = str_replace('{{moduleName}}', $this->module_name, $stub);
         $stub = str_replace('{{namespace}}', $this->module_namespace, $stub);
-        
+
         file_put_contents($this->module_path . DIRECTORY_SEPARATOR . $this->module_name . 'ModuleServiceProvider.php', $stub);
     }
 

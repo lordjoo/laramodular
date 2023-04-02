@@ -5,6 +5,7 @@ namespace Lordjoo\Laramodular;
 use Filament\Support\Commands\Concerns;
 use Filament\Commands\MakeResourceCommand;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
 
@@ -48,6 +49,17 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
             $this->call('make:module', ['name' => $this->module_name]);
         }
 
+        if (!is_dir(config('laramodular.modules_path') . DIRECTORY_SEPARATOR . $this->module_name)) {
+            $this->components->warn("Module {$this->module_name} does not exists!");
+            $this->call('make:module', ['name' => $this->module_name]);
+        }
+//        dd(config('laramodular.modules_path') . DIRECTORY_SEPARATOR . $this->module_name .
+//            DIRECTORY_SEPARATOR . "Filament/Resources");
+        if(!is_dir(config('laramodular.modules_path') . DIRECTORY_SEPARATOR . $this->module_name . DIRECTORY_SEPARATOR . "Filament/Resources"))
+        {
+            File::makeDirectory(config('laramodular.modules_path') . DIRECTORY_SEPARATOR . $this->module_name .
+            DIRECTORY_SEPARATOR . "Filament/Resources", 7777,true);
+        }
         $resource = "{$model}Resource";
         $resourceClass = "{$modelClass}Resource";
         $resourceNamespace = $modelNamespace;
@@ -61,10 +73,10 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
         $baseResourcePath = $this->getBaseResourcePath($resource);
 
         $this->namespace = $this->getNamespace($resource);
-
 //        dd($this->namespace);
 
         $resourcePath = "{$baseResourcePath}.php";
+//        dd($resourcePath);
         $resourcePagesDirectory = "{$baseResourcePath}/Pages";
         $listResourcePagePath = "{$resourcePagesDirectory}/{$this->listResourcePageClass}.php";
         $manageResourcePagePath = "{$resourcePagesDirectory}/{$this->manageResourcePageClass}.php";
@@ -205,13 +217,12 @@ class MakeFilamentResourceCommand extends MakeResourceCommand
     }
 
     public function getBaseResourcePath($resource)
-    {
-        $module =  config('laramodular.modules_path').'\\'.$this->module_name;
-        return base_path(
-            (string) Str::of($resource)
-                ->prepend($module.'\\Filament\\Resources\\')
-                ->replace('\\', '/')->replace(base_path(), ''),
-        );
+    {                                                                               //E:/work/Backend/laravel/lordjooPackage/app/Modules/Categories/Filament/Resources/CategoriesResource
+        $module =  config('laramodular.modules_path').'\\'.$this->module_name; //E:\work\Backend\laravel\lordjooPackage\app/Modules\Categories (module)
+           return (string) Str::of($module)
+                ->append('\\Filament\\Resources\\'.$resource)
+                ->replace('\\', '/');
+
     }
 
     public function pagesCode()
