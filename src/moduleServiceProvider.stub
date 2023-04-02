@@ -1,0 +1,10 @@
+<?php
+
+namespace {{namespace}}\{{moduleName}};
+
+use Lordjoo\Laramodular\ModuleServiceProvider;
+
+class {{moduleName}}ModuleServiceProvider extends ModuleServiceProvider
+{
+
+}

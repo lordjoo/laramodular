@@ -6,5 +6,14 @@ return [
     'autoload' => [
 //        'Helpers/functions.php'
     ],
+    "filament" => [
+        "resourcesPath" => __DIR__ . "/Filament/Resources",
+        "pagesPath" => __DIR__ . "/Filament/Pages",
+        "widgetsPath" => __DIR__ . "/Filament/Widgets",
+        "path" => __DIR__ . "/Filament",
+        "pages" => [],
+        "resources" => [],
+        "widgets" => [],
+    ],
     'middleware' => [],
 ];

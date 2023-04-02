@@ -5,20 +5,26 @@ namespace Lordjoo\Laramodular;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class NewModuleCommand extends Command
+class MakeModuleCommand extends Command
 {
-    protected $signature = 'new:module {name}';
+    protected $signature = 'make:module {name}';
 
     protected $description = 'Create New Module';
     private string $module_name;
     private string $module_path;
+    private string $module_namespace;
+
 
     public function handle()
     {
 
         $this->module_name = $this->argument('name');
-        $this->module_name = Str::title(Str::camel($this->module_name));
+        $this->module_name = Str::of($this->module_name)
+            ->ucfirst()
+            ->camel()
+            ->studly();
         $modules_path = config('laramodular.modules_path');
+        $this->module_namespace = $module_namespace = config('laramodular.modules_namespace');
         if (!is_dir($modules_path))
             mkdir($modules_path, 0777, true);
 
@@ -40,16 +46,22 @@ class NewModuleCommand extends Command
                 "Seeders" => "DIR",
             ],
             "Jobs" => "DIR",
-            "Lang" => "DIR",
+//            "Lang" => "DIR",
             "Models" => "DIR",
             "Requests" => "DIR",
-            "Resources" => "DIR",
+            "ApiResources" => "DIR",
+            "Resources" => [
+                'css' => "DIR",
+                'js' => "DIR",
+                'views' => "DIR",
+            ],
             'Routes' => [
                 'web.php' => "FILE",
                 'api.php' => "FILE",
             ],
-            "Views" => "DIR",
+//            "Views" => "DIR",
             'config.php' => "FILE",
+            $this->module_name. 'ModuleServiceProvider.php' => "FILE",
         ];
         foreach ($dirs as $dir => $type) {
             if (is_array($type)) {
@@ -57,18 +69,21 @@ class NewModuleCommand extends Command
                 foreach ($type as $subdir => $subtype) {
                     if ($subtype == "DIR") {
                         mkdir($this->module_path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $subdir, 0755, true);
+                        touch($this->module_path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $subdir . DIRECTORY_SEPARATOR . '.gitingore');
                     } else {
-                        touch($this->module_path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $subdir);
+                        file_put_contents($this->module_path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $subdir,'<?php');
                     }
                 }
             } else if ($type == "FILE") {
                 touch($this->module_path . DIRECTORY_SEPARATOR . $dir);
             } else if ($type == "DIR") {
                 mkdir($this->module_path . DIRECTORY_SEPARATOR . $dir, 0755, true);
+                touch($this->module_path . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . '.gitingore');
             }
         }
         $this->makeConfigFile();
-        $this->info('Module created successfully.');
+        $this->makeServiceProviderFile();
+        $this->components->info('Module created successfully.');
 
     }
 
@@ -77,6 +92,15 @@ class NewModuleCommand extends Command
         $stub = file_get_contents(__DIR__ . '/moduleConfig.stub');
         $stub = str_replace('{{moduleName}}', $this->module_name, $stub);
         file_put_contents($this->module_path . DIRECTORY_SEPARATOR . 'config.php', $stub);
+    }
+
+    private function makeServiceProviderFile()
+    {
+        $stub = file_get_contents(__DIR__ . '/moduleServiceProvider.stub');
+        $stub = str_replace('{{moduleName}}', $this->module_name, $stub);
+        $stub = str_replace('{{namespace}}', $this->module_namespace, $stub);
+        
+        file_put_contents($this->module_path . DIRECTORY_SEPARATOR . $this->module_name . 'ModuleServiceProvider.php', $stub);
     }
 
 }
